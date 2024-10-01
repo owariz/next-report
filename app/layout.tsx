@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import { Toaster } from 'react-hot-toast';
 import AuthProvider from '@/components/AuthProvider'
 import { getServerSession } from 'next-auth'
 import { authOptions } from './api/auth/[...nextauth]/route'
@@ -43,6 +44,11 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Toaster
+          position="top-right"
+          reverseOrder={false}
+        />
+        
         <AuthProvider session={session}>
           <Navbar />
           <div className="min-h-screen bg-gray-100 py-6">

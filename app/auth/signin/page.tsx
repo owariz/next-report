@@ -14,7 +14,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      router.replace('/dashboard')
+      router.replace('/')
     }
   }, [status, router])
 
@@ -30,7 +30,7 @@ export default function SignIn() {
       if (result?.error) {
         setError('Invalid credentials')
       } else {
-        router.push('/dashboard')
+        router.push('/')
       }
     } catch (error) {
       console.error('An error occurred:', error)
