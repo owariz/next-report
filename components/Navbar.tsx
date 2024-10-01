@@ -9,7 +9,7 @@ export default function Navbar() {
     const { data: session, status } = useSession()
 
     return (
-        <nav className={`fixed w-full top-0 left-0 z-10 h-[70px] flex justify-center bg-white backdrop-blur-md`}>
+        <nav className={`w-full top-0 left-0 z-10 h-[70px] flex justify-center bg-white backdrop-blur-md`}>
             <div className="px-6 2xl:px-0 w-full xl:w-[1480px] h-full flex justify-between items-center">
                 <div className="flex items-center space-x-4">
                     <Link href={'/'} className="flex space-x-2 items-center transition duration-500 ease-out hover:scale-110">

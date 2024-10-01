@@ -1,7 +1,7 @@
 import { connectDB } from '@/lib/mongoose'
 import Student from '@/models/Student'
 
-export async function GET(req: Request, { params }: { params: { sid: string } },) {
+export async function GET(req: Request, { params }: { params: { sid: string } }) {
     await connectDB()
     const std_id = params.sid
 
