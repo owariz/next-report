@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
 import { connectDB } from '@/lib/mongoose'
 import User from '@/models/User'
@@ -12,7 +11,7 @@ export async function POST(request: Request) {
     // ตรวจสอบว่ามีอีเมลนี้ในระบบแล้วหรือไม่
     const existingUser = await User.findOne({ email })
     if (existingUser) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'User already exists' },
         { status: 400 }
       )
@@ -29,13 +28,13 @@ export async function POST(request: Request) {
       role: 'user'
     })
 
-    return NextResponse.json({
+    return Response.json({
       message: 'User created successfully',
       userId: user._id
     })
   } catch (error) {
     console.error('Registration error:', error)
-    return NextResponse.json(
+    return Response.json(
       { error: 'Error creating user' },
       { status: 500 }
     )

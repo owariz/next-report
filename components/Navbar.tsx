@@ -1,8 +1,7 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { signOut } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
 
 export default function Navbar() {

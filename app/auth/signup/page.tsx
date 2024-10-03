@@ -16,7 +16,7 @@ export default function SignUp() {
 
     useEffect(() => {
       if (status === 'authenticated') {
-        router.replace('/dashboard')
+        router.replace('/')
       }
     }, [status, router])
   
