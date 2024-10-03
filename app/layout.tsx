@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import { Toaster } from 'react-hot-toast';
 import AuthProvider from '@/components/AuthProvider'
 import { getServerSession } from 'next-auth'
 import { authOptions } from './api/auth/[...nextauth]/route'
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 async function getSession() {
   const session = await getServerSession(authOptions)
@@ -40,13 +42,18 @@ export default async function RootLayout({
       <head>
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.0/css/all.css" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Toaster position="top-right" reverseOrder={false} />
+        
         <AuthProvider session={session}>
-          <Navbar />
-          <div className="min-h-screen bg-gray-100 py-6">
-            {children}
+          <div className="container mx-auto">
+            <div className="flex flex-col max-w-4xl mx-auto">
+              <Navbar />
+              <div className="py-6">
+                {children}
+              </div>
+              <Footer />
+            </div>
           </div>
         </AuthProvider>
       </body>

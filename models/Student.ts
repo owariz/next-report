@@ -1,9 +1,33 @@
 import mongoose from 'mongoose'
-import { Student } from 'next-auth'
 
-export interface IStudent extends Omit<Student, 'id'> {
+export interface IStudent {
     _id: mongoose.Types.ObjectId
+    std_id: string
+    prefix?: string
+    name: string
+    surname: string
+    nickname?: string
+    grade?: string
+    classroom?: string
+    score: number
+    misconducts?: Misconduct[]
+    createdAt?: Date
+    updatedAt?: Date
 }
+
+export interface Misconduct {
+    misconduct: string
+    scoreDeduction: number
+    remark?: string
+    date: Date
+}
+
+const MisconductSchema = new mongoose.Schema<Misconduct>({
+    misconduct: { type: String, required: true },
+    scoreDeduction: { type: Number, required: true },
+    remark: { type: String },
+    date: { type: Date, default: Date.now }
+})
 
 const StudentSchema = new mongoose.Schema<IStudent>({
     std_id: {
@@ -12,17 +36,24 @@ const StudentSchema = new mongoose.Schema<IStudent>({
         unique: true
     },
     prefix: String,
-    name: String,
-    surname: String,
+    name: {
+        type: String,
+        required: true
+    },
+    surname: {
+        type: String,
+        required: true
+    },
     nickname: String,
     grade: String,
     classroom: String,
     score: {
         type: Number,
         default: 100
-    } 
+    },
+    misconducts: [MisconductSchema]  // เก็บประวัติการทำผิด
 }, {
     timestamps: true
-})
+});
 
 export default mongoose.models.Student || mongoose.model<IStudent>('Student', StudentSchema)
