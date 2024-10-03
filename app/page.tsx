@@ -4,6 +4,7 @@ import React from 'react'
 import { useState } from 'react'
 import { AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
+import Link from 'next/link'
 
 interface Student {
   std_id: string
@@ -110,6 +111,13 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto">
+      <div className="flex md:hidden justify-end bg-white border rounded-md shadow-md mx-auto p-2 mb-4">
+        {/* Button */}
+        <Link href={'/student'} className="font-bold px-8 py-2 rounded-lg bg-blue-100 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition duration-300 ease-out">
+          ข้อมูลนักศึกษา
+        </Link>
+      </div>
+
       <div className="bg-white border rounded-md shadow-md mx-auto p-8 mb-4">
         <h2 className="text-center text-2xl font-semibold mb-4">ระบบบันทึกคะแนนนักศึกษา</h2>
 
