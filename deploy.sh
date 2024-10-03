@@ -1,21 +1,19 @@
 #!/bin/bash
 
-# GitHub Container Registry login
-echo $CR_PAT | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
+# Pull latest changes from GitHub
+git pull origin main
 
-# Pull latest image
-docker pull ghcr.io/variz-h264/next-report:latest
+# Install dependencies
+npm install
 
-# Stop and remove existing container
-docker stop next-report || true
-docker rm next-report || true
+# Build the application (ถ้าจำเป็น)
+npm run build
 
-# Run new container
-docker run -d \
-  --name next-report \
-  --env-file .env \
-  -p 3000:3000 \
-  ghcr.io/variz-h264/next-report:latest
+# Stop the current instance (ใช้ pm2 หรือ forever แทน)
+pm2 stop next-report || true
+
+# Start the new instance
+pm2 start npm --name next-report -- start
 
 # Show status
-docker ps | grep next-report
+pm2 status next-report
