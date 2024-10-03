@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# GitHub Container Registry login
+echo $CR_PAT | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
+
 # Pull latest image
 docker pull ghcr.io/variz-h264/next-report:latest
 
