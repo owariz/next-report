@@ -2,7 +2,7 @@ name: Docker Build and Push
 
 on:
   push:
-    branches: [ main ]  # หรือชื่อ branch หลักของคุณ
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -28,5 +28,5 @@ jobs:
         context: .
         push: true
         tags: |
-          ghcr.io/${{ github.repository }}:latest
-          ghcr.io/${{ github.repository }}:${{ github.sha }}
+          ghcr.io/variz-h264/next-report:latest
+          ghcr.io/variz-h264/next-report:${{ github.sha }}

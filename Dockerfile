@@ -1,4 +1,3 @@
-# ใช้ node alpine เป็น base image
 FROM node:18-alpine AS base
 
 # 1. Dependencies
@@ -6,7 +5,6 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package files
 COPY package.json package-lock.json ./
 RUN npm ci
 

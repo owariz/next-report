@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# ดึง image ล่าสุดจาก GitHub Container Registry
-docker pull ghcr.io/Variz-h264/next-report:latest
+# Pull latest image
+docker pull ghcr.io/variz-h264/next-report:latest
 
-# หยุดและลบ container เดิม (ถ้ามี)
-docker stop nextjs-app || true
-docker rm nextjs-app || true
+# Stop and remove existing container
+docker stop next-report || true
+docker rm next-report || true
 
-# รัน container ใหม่
+# Run new container
 docker run -d \
-  --name nextjs-app \
+  --name next-report \
   --env-file .env \
   -p 3000:3000 \
-  ghcr.io/Variz-h264/next-report:latest
+  ghcr.io/variz-h264/next-report:latest
 
-# แสดงสถานะ
-docker ps | grep nextjs-app
+# Show status
+docker ps | grep next-report
