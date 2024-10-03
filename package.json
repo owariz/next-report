@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.1.8",
+    "@next/third-parties": "^14.2.14",
     "@types/bcrypt": "^5.0.2",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
