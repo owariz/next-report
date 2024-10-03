@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
 
@@ -58,6 +57,7 @@ export default function AddStdent() {
                 toast.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูลนักศึกษา')
             }
         } catch (err) {
+            console.error('Error:', err)
             toast.error('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์')
         } finally {
             setIsLoading(false)

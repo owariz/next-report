@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -54,6 +54,7 @@ export default function Dashboard() {
         setStudent(null)
       }
     } catch (err) {
+      console.error('Error fetching student data:', err)
       toast.error('เกิดข้อผิดพลาดในการค้นหาข้อมูล')
       setError('เกิดข้อผิดพลาดในการค้นหาข้อมูล')
     } finally {
@@ -90,6 +91,7 @@ export default function Dashboard() {
         toast.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
       }
     } catch (err) {
+      console.error('Error save student data:', err)
       toast.error('เกิดข้อผิดพลาดในการบันทึกข้อมูล')
     } finally {
       setIsReporting(false)

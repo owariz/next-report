@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
@@ -50,6 +50,7 @@ export default function Student() {
         setStudent(null)
       }
     } catch (err) {
+      console.error('Error:', err)
       toast.error('เกิดข้อผิดพลาดในการค้นหาข้อมูล')
       setError('เกิดข้อผิดพลาดในการค้นหาข้อมูล')
       setStudent(null)
