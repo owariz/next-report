@@ -14,7 +14,7 @@ interface Profile {
 }
 
 export default function Profile() {
-    const { data: session, status } = useSession()
+    const { data: session } = useSession()
     const [profile, setProfile] = useState<Profile | null>(null)
 
     useEffect(() => {
