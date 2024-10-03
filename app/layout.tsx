@@ -7,7 +7,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth.config'
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import GoogleAnalytics from '@/components/GoogleAnalytics';
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 async function getSession() {
   const session = await getServerSession(authOptions)
@@ -26,8 +26,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en">
       <head>
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.0/css/all.css" />
-
-        <GoogleAnalytics />
       </head>
       <body>
         <Toaster position="top-right" reverseOrder={false} />
@@ -42,6 +40,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           </div>
         </AuthProvider>
       </body>
+      <GoogleAnalytics gaId="G-80BZHXGRJR" />
     </html>
   );
 }
