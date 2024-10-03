@@ -1,16 +1,18 @@
 'use client'
 
+import React from 'react'
 import { useState, useEffect } from 'react'
-import toast from 'react-hot-toast'
 import { AlertCircle } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 interface Student {
-  std_id: string;
-  name: string;
-  surname: string;
-  grade: string;
-  classroom: string;
-  score?: number;
+  std_id: string
+  prefix: string
+  name: string
+  surname: string
+  grade: string
+  classroom: string
+  score?: number
 }
 
 export default function Dashboard() {
@@ -105,12 +107,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container mx-auto p-8 flex justify-center">
-      <div className="bg-white p-8 rounded-md shadow-md w-full max-w-md">
+    <div className="container mx-auto">
+      <div className="bg-white border rounded-md shadow-md mx-auto p-8 mb-4">
         <h2 className="text-center text-2xl font-semibold mb-4">ระบบบันทึกคะแนนนักศึกษา</h2>
 
-        {!student ? (
-          <form onSubmit={handleSearch} className="flex flex-col items-center">
+        <form onSubmit={handleSearch} className="flex flex-col items-center">
             <div className="w-full mb-4">
               <label htmlFor="sid" className="block text-sm font-medium text-gray-700 mb-1">
                 รหัสนักศึกษา
@@ -148,6 +149,10 @@ export default function Dashboard() {
               {isSubmitting ? 'กำลังค้นหา...' : 'ค้นหา'}
             </button>
           </form>
+          <hr className="border-gray-200 my-2" />
+
+        {!student ? (
+          null
         ) : success ? (
           <div className="text-center">
             <h3 className="text-lg font-semibold mb-2">บันทึกการกระทำความผิดสำเร็จ</h3>
@@ -156,6 +161,7 @@ export default function Dashboard() {
               <p><strong>คะแนนที่หัก:</strong> {scoreDeduction} คะแนน</p>
               <p><strong>คะแนนคงเหลือ:</strong> {student.score} คะแนน</p>
             </div>
+
             <button
               onClick={handleReset}
               className="font-bold bg-green-100 border-2 border-green-400 text-green-400 px-4 py-2 rounded-lg hover:bg-green-400 hover:text-white transition duration-300 ease-out"
@@ -164,21 +170,39 @@ export default function Dashboard() {
             </button>
           </div>
         ) : (
-          <div className="text-center">
-            <div className="bg-gray-50 p-4 rounded-lg mb-4">
-              <h3 className="text-lg font-semibold mb-2">ข้อมูลนักศึกษา</h3>
-              <p><strong>รหัส:</strong> {student.std_id}</p>
-              <p><strong>ชื่อ-นามสกุล:</strong> {student.name} {student.surname}</p>
-              <p><strong>ชั้นเรียน:</strong> {student.grade}/{student.classroom}</p>
+          <>
+            <h2 className="text-3xl font-semibold mb-6 text-gray-800 border-b pb-2">Student Details</h2>
+            <div className="relative overflow-x-auto mb-4">
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">SID</th>
+                    <th scope="col" className="px-6 py-3">Name</th>
+                    <th scope="col" className="px-6 py-3">Classroom</th>
+                    <th scope="col" className="px-6 py-3">Total Score</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr className={`border-t bg-gray-100`}>
+                    <td className="px-6 py-4 whitespace-nowrap">{student.std_id}</td>
+                    <td className="px-6 py-4">{student.prefix}{student.name} {student.surname}</td>
+                    <td className="px-6 py-4">{student.grade}/{student.classroom}</td>
+                    <td className="px-6 py-4">{student.score} points</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {!reportVisible ? (
-              <button
-                onClick={() => setReportVisible(true)}
-                className="font-bold bg-red-100 border-2 border-red-400 text-red-400 px-4 py-2 rounded-lg hover:bg-red-400 hover:text-white transition duration-300 ease-out"
-              >
-                บันทึกการกระทำความผิด
-              </button>
+              <div className="text-center">
+                <button
+                  onClick={() => setReportVisible(true)}
+                  className="font-bold bg-red-100 border-2 border-red-400 text-red-400 px-4 py-2 rounded-lg hover:bg-red-400 hover:text-white transition duration-300 ease-out"
+                >
+                  บันทึกการกระทำความผิด
+                </button>
+              </div>
             ) : (
               <form onSubmit={handleReportSubmit} className="mt-4 p-4 border rounded-lg bg-gray-50">
                 <h4 className="text-lg font-semibold mb-4">บันทึกการกระทำความผิด</h4>
@@ -216,7 +240,7 @@ export default function Dashboard() {
                     placeholder="ระบุการกระทำความผิด"
                     value={misconduct}
                     onChange={(e) => setMisconduct(e.target.value)}
-                    className="border border-gray-300 p-2 rounded-lg w-full"
+                    className="font-semibold border p-2 rounded-lg w-full outline-none transition duration-300 ease-out border-gray-300 focus:border-gray-400"
                   />
                 </div>
 
@@ -230,7 +254,7 @@ export default function Dashboard() {
                     placeholder="ระบุคะแนนที่จะหัก"
                     value={scoreDeduction}
                     onChange={(e) => setScoreDeduction(Number(e.target.value))}
-                    className="border border-gray-300 p-2 rounded-lg w-full"
+                    className="font-semibold border p-2 rounded-lg w-full outline-none transition duration-300 ease-out border-gray-300 focus:border-gray-400"
                   />
                 </div>
 
@@ -243,7 +267,7 @@ export default function Dashboard() {
                     placeholder="ระบุหมายเหตุ (ถ้ามี)"
                     value={remark}
                     onChange={(e) => setRemark(e.target.value)}
-                    className="border border-gray-300 p-2 rounded-lg w-full h-24 resize-none"
+                    className="border p-2 rounded-lg w-full h-24 resize-none outline-none transition duration-300 ease-out border-gray-300 focus:border-gray-400"
                   />
                 </div>
 
@@ -259,6 +283,7 @@ export default function Dashboard() {
                   >
                     {isReporting ? 'กำลังบันทึก...' : 'บันทึก'}
                   </button>
+
                   <button
                     type="button"
                     onClick={() => setReportVisible(false)}
@@ -269,7 +294,7 @@ export default function Dashboard() {
                 </div>
               </form>
             )}
-          </div>
+          </>
         )}
       </div>
     </div>

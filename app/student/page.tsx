@@ -1,46 +1,42 @@
 'use client'
 
+import React from 'react'
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { AlertCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
+import Link from 'next/link'
 
 interface Misconduct {
-  date: string;
-  misconduct: string;
-  scoreDeduction: number;
-  remark: string;
+  date: string
+  misconduct: string
+  scoreDeduction: number
+  remark: string
 }
 
 interface Student {
-  std_id: string;
+  std_id: string
+  prefix: string
+  nickname: string;
   name: string;
-  surname: string;
-  grade: string;
-  classroom: string;
-  score?: number;
-  misconducts?: Misconduct[];
+  surname: string
+  grade: string
+  classroom: string
+  score?: number
+  misconducts?: Misconduct[]
 }
 
 export default function Student() {
-  const router = useRouter()
   const [sid, setSid] = useState('')
   const [student, setStudent] = useState<Student | null>(null)
   const [misconductHistory, setMisconductHistory] = useState<Misconduct[]>([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [isAdding, setIsAdding] = useState(false) // State สำหรับเพิ่มข้อมูล
-  const [newStudent, setNewStudent] = useState<Student>({
-    std_id: '',
-    name: '',
-    surname: '',
-    grade: '',
-    classroom: '',
-    score: 100,
-  }) // สำหรับเก็บข้อมูลนักศึกษาใหม่
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const fetchStudentDetails = async (sid: number) => {
     setIsLoading(true)
+    setIsSubmitting(true)
+
     try {
       const res = await fetch(`/api/report/search/${sid}`)
       if (res.status === 200) {
@@ -59,6 +55,7 @@ export default function Student() {
       setStudent(null)
     } finally {
       setIsLoading(false)
+      setIsSubmitting(false)
     }
   }
 
@@ -71,159 +68,23 @@ export default function Student() {
     fetchStudentDetails(Number(sid))
   }
 
-  const handleAddStudent = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    try {
-      const res = await fetch('/api/report/add', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newStudent)
-      })
-
-      if (res.status === 201) {
-        toast.success('เพิ่มข้อมูลนักศึกษาเรียบร้อยแล้ว')
-        setStudent(null)
-        setSid('')
-        setIsAdding(false) // กลับไปหน้าค้นหานักศึกษา
-        setNewStudent({
-          std_id: '',
-          name: '',
-          surname: '',
-          grade: '',
-          classroom: '',
-          score: 100
-        })
-      } else {
-        toast.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูลนักศึกษา')
-      }
-    } catch (err) {
-      toast.error('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์')
-    }
-  }
-
-  const handleNewStudentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setNewStudent((prev) => ({
-      ...prev,
-      [name]: value
-    }))
-  }
-
-  if (isAdding) {
-    return (
-      <div className="container mx-auto p-8">
-        <div className="bg-white p-8 rounded-md shadow-md max-w-md mx-auto mb-4">
-          <h2 className="text-2xl font-semibold mb-4 text-center">เพิ่มนักศึกษาใหม่</h2>
-          <form onSubmit={handleAddStudent}>
-            <div className="mb-4">
-              <label htmlFor="std_id" className="block text-sm font-medium text-gray-700 mb-1">
-                รหัสนักศึกษา
-              </label>
-              <input
-                type="text"
-                id="std_id"
-                name="std_id"
-                value={newStudent.std_id}
-                onChange={handleNewStudentChange}
-                className="font-semibold border p-2 rounded-lg w-full outline-none border-gray-300 focus:border-gray-400"
-                placeholder="กรอกรหัสนักศึกษา"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                ชื่อ
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={newStudent.name}
-                onChange={handleNewStudentChange}
-                className="font-semibold border p-2 rounded-lg w-full outline-none border-gray-300 focus:border-gray-400"
-                placeholder="กรอกชื่อ"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="surname" className="block text-sm font-medium text-gray-700 mb-1">
-                นามสกุล
-              </label>
-              <input
-                type="text"
-                id="surname"
-                name="surname"
-                value={newStudent.surname}
-                onChange={handleNewStudentChange}
-                className="font-semibold border p-2 rounded-lg w-full outline-none border-gray-300 focus:border-gray-400"
-                placeholder="กรอกนามสกุล"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="grade" className="block text-sm font-medium text-gray-700 mb-1">
-                ชั้นเรียน
-              </label>
-              <input
-                type="text"
-                id="grade"
-                name="grade"
-                value={newStudent.grade}
-                onChange={handleNewStudentChange}
-                className="font-semibold border p-2 rounded-lg w-full outline-none border-gray-300 focus:border-gray-400"
-                placeholder="กรอกชั้นเรียน"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label htmlFor="classroom" className="block text-sm font-medium text-gray-700 mb-1">
-                ห้องเรียน
-              </label>
-              <input
-                type="text"
-                id="classroom"
-                name="classroom"
-                value={newStudent.classroom}
-                onChange={handleNewStudentChange}
-                className="font-semibold border p-2 rounded-lg w-full outline-none border-gray-300 focus:border-gray-400"
-                placeholder="กรอกห้องเรียน"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full font-bold px-4 py-2 rounded-lg bg-green-100 border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white"
-            >
-              เพิ่มนักศึกษา
-            </button>
-          </form>
-
-          <button
-            onClick={() => setIsAdding(false)}
-            className="font-bold bg-gray-100 border-2 border-gray-400 text-gray-400 px-6 py-2 mt-6 rounded-lg transition duration-300 ease-out hover:bg-gray-400 hover:text-white"
-          >
-            ยกเลิก
-          </button>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="container mx-auto p-8">
-      <div className="bg-white p-2 rounded-md shadow-md max-w-md mx-auto mb-4">
-        {/* Add New Student Button */}
-        <button
-          onClick={() => setIsAdding(true)}
-          className="w-full font-bold px-4 py-2 rounded-lg bg-blue-100 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition duration-300 ease-out"
-        >
-          เพิ่มนักศึกษาใหม่
-        </button>
+    <div className="container mx-auto">
+      <div className="flex justify-end bg-white border rounded-md shadow-md mx-auto p-2 mb-4">
+        {/* Button */}
+        {student ? (
+          <Link href={`/student/edit/${sid}`} className="font-bold px-8 py-2 rounded-lg bg-orange-100 border-2 border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-white transition duration-300 ease-out">
+            แก้ไขข้อมูลนักศึกษา
+          </Link>
+        ) : (
+          <Link href={'/student/add'} className="font-bold px-8 py-2 rounded-lg bg-blue-100 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition duration-300 ease-out">
+            เพิ่มนักศึกษาใหม่
+          </Link>
+        )}
       </div>
 
       {/* Existing Search Form */}
-      <div className="bg-white p-8 rounded-md shadow-md max-w-md mx-auto mb-4">
+      <div className="bg-white border rounded-md shadow-md mx-auto p-8 mb-4">
         <h2 className="text-2xl font-semibold mb-4 text-center">ค้นหานักศึกษา</h2>
         <form onSubmit={handleSearch}>
           <div className="mb-4">
@@ -250,14 +111,92 @@ export default function Student() {
               </div>
             )}
           </div>
+
           <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full font-bold px-4 py-2 rounded-lg bg-green-100 border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-white transition duration-300 ease-out"
-          >
-            {isLoading ? 'กำลังค้นหา...' : 'ค้นหา'}
-          </button>
+              type="submit"
+              disabled={!sid.trim() || isSubmitting}
+              className={`font-bold w-full py-2 rounded-lg transition duration-300 ease-out ${
+                !sid.trim() || isSubmitting
+                  ? 'bg-gray-100 border-2 border-gray-400 text-gray-400 cursor-not-allowed'
+                  : 'bg-blue-100 border-2 border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white'
+              }`}
+            >
+              {isLoading ? 'กำลังค้นหา...' : 'ค้นหา'}
+            </button>
         </form>
+        
+        <hr className="border-gray-200 my-2" />
+        {/* Student Details */}
+        {(student) ? (
+          <>
+            <h2 className="text-3xl font-semibold mb-6 text-gray-800 border-b pb-2">Student Details</h2>
+            <div className="relative overflow-x-auto mb-4">
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">SID</th>
+                    <th scope="col" className="px-6 py-3">Nickname</th>
+                    <th scope="col" className="px-6 py-3">Name</th>
+                    <th scope="col" className="px-6 py-3">Classroom</th>
+                    <th scope="col" className="px-6 py-3">Total Score</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr className={`border-t bg-gray-100`}>
+                    <td className="px-6 py-4 whitespace-nowrap">{student.std_id}</td>
+                    <td className="px-6 py-4">{student.nickname}</td>
+                    <td className="px-6 py-4">{student.prefix}{student.name} {student.surname}</td>
+                    <td className="px-6 py-4">{student.grade}/{student.classroom}</td>
+                    <td className="px-6 py-4">{student.score} points</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 className="text-xl font-semibold my-4">Misconduct History</h3>
+            {misconductHistory.length > 0 ? (
+              <div className="relative overflow-x-auto">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th scope="col" className="px-6 py-3">Date</th>
+                        <th scope="col" className="px-6 py-3">Misconduct</th>
+                        <th scope="col" className="px-6 py-3">Deduction</th>
+                        <th scope="col" className="px-6 py-3">Remarks</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {misconductHistory.map((record, index) => {
+                      return (
+                        <tr key={index} className={`border-t ${index % 2 === 0? 'bg-gray-100' : 'bg-gray-50'}`}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {new Date(record.date).toLocaleString('th-TH', {
+                              year: 'numeric',
+                              month: 'numeric',
+                              day: '2-digit',
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              second: 'numeric'
+                            })}
+                          </td>
+                          <td className="px-6 py-4">{record.misconduct}</td>
+                          <td className="px-6 py-4">{record.scoreDeduction} points</td>
+                          <td className="px-6 py-4">{record.remark == '' ? "ไม่ระบุ" : record.remark}</td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>No misconducts recorded</p>
+            )}
+          </>
+        ) : (
+            null
+        )}
       </div>
     </div>
   )

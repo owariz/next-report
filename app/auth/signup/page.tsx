@@ -52,13 +52,10 @@ export default function SignUp() {
     }
   
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Create your account
-            </h2>
-          </div>
+      <div className="container mx-auto">
+        <div className="bg-white border rounded-md shadow-md mx-auto p-8 mb-4">
+          <h2 className="text-center text-2xl font-semibold mb-4">Create your account</h2>
+
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             {error && (
               <div className="text-red-500 text-center">{error}</div>
